@@ -8,7 +8,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 // routes
-const userRoutes = require("./routes/user.router");
+const userRoutes = require("./routes/auth");
+const adminRoutes = require("./routes/admin/auth");
 
 // enviroment variable or you can say constant
 env.config();
@@ -19,6 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/user", userRoutes);
+app.use("/api/admin", adminRoutes);
 
 mongoose
   .connect(
@@ -26,7 +28,8 @@ mongoose
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => {
-    app.listen(process.env.PORT || 3000);
+    app.listen(process.env.PORT || 8000);
+    console.log("app listening on port 8000");
   })
   .catch((err) => {
     console.log(err);
