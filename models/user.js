@@ -5,25 +5,17 @@ const userSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      require: true,
+      // require: true,
       trim: true,
       min: 3,
       max: 20,
     },
     lastName: {
       type: String,
-      require: true,
+      // require: true,
       trim: true,
       min: 3,
       max: 20,
-    },
-    userName: {
-      type: String,
-      require: true,
-      trim: true,
-      unique: true,
-      index: true,
-      lowercase: true,
     },
     email: {
       type: String,
@@ -34,11 +26,11 @@ const userSchema = new mongoose.Schema(
     },
     dob: {
       type: Date,
-      required: true,
+      // required: true,
     },
     phone: {
       type: String,
-      required: true,
+      // required: true,
     },
     hash_password: {
       type: String,

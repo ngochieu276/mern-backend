@@ -8,21 +8,15 @@ exports.register = async (req, res) => {
     if (user) return res.status(400).json({ message: "User already register" });
   });
 
-  const { firstName, lastName, userName, email, password, dob, phone } =
-    req.body;
+  const { email, password } = req.body;
   const hash_password = await bcrypt.hash(password, 10);
 
-  const _user = new User({
-    firstName,
-    lastName,
-    userName,
-    email,
-    dob,
-    phone,
-    hash_password,
-    role: "user",
-  });
-  console.log(_user);
+	const _user = new User({
+		email,
+		hash_password,
+		role: "user",
+	});
+	console.log(_user);
 
   _user.save((error, data) => {
     if (error) {
@@ -31,6 +25,7 @@ exports.register = async (req, res) => {
     if (data) {
       return res.status(200).json({
         message: "User create successfull",
+				data: data,
       });
     }
   });
@@ -50,8 +45,7 @@ exports.login = (req, res) => {
           }
         );
 
-        const { _id, firstName, lastName, userName, email, dob, phone, role } =
-          user;
+				const { _id, firstName, lastName, email, dob, phone, role } = user;
 
         res.status(200).json({
           token,
@@ -59,7 +53,6 @@ exports.login = (req, res) => {
             _id,
             firstName,
             lastName,
-            userName,
             email,
             dob,
             phone,
@@ -82,3 +75,46 @@ exports.login = (req, res) => {
 //   res.status(200).json({ message: "Signout successfully" });
 //   console.log(res);
 // };
+
+exports.updateUser = async (req, res) => {
+	const { _id } = req.user;
+	const updateData = req.body;
+
+	if (updateData.password) {
+		const newPassword = await bcrypt.hash(updateData.password, 10);
+		updateData.password = newPassword;
+	}
+
+	try {
+		const updatedUser = await User.findByIdAndUpdate(_id, updateData, {
+			new: true,
+		}).select("-hash_password -__v -createdAt -updatedAt");
+
+		res.status(200).send({
+			success: 1,
+			data: updatedUser,
+			message: "User info updated",
+		});
+	} catch (err) {
+		res.status(500).send({
+			success: 0,
+			message: err.message,
+		});
+	}
+};
+
+exports.getUser = async (req, res) => {
+	try {
+		const user = req.user;
+
+		res.status(200).send({
+			success: 1,
+			data: user,
+		});
+	} catch (err) {
+		res.status(500).send({
+			success: 0,
+			message: err.message,
+		});
+	}
+};
