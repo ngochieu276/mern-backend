@@ -1,5 +1,11 @@
 const express = require("express");
-const { login, register, updateUser, getUser } = require("../controllers/auth");
+const { login, register, getUserInformation, updateUser } = require("../controllers/auth");
+const {
+  requireSignin,
+  userMiddleware,
+  adminMiddleware,
+} = require("../common-middleware/index");
+
 const {
 	validateLoginRequest,
 	validateRegisterRequest,
@@ -12,6 +18,8 @@ router.post("/login", validateLoginRequest, isRequestValidated, login);
 
 router.post("/register", validateRegisterRequest, isRequestValidated, register);
 
+router.get("/me", requireSignin, getUserInformation);
+
 // router.post("/signout", signout);
 
 // router.post("/profile", requireSignin, (req, res) => {
@@ -19,7 +27,5 @@ router.post("/register", validateRegisterRequest, isRequestValidated, register);
 // });
 
 router.put("/update", tokenAuth, updateUser);
-
-router.get("/me", tokenAuth, getUser);
 
 module.exports = router;

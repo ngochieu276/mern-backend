@@ -70,11 +70,15 @@ exports.login = (req, res) => {
   });
 };
 
-// exports.signout = (req, res) => {
-//   res.clearCookie("token");
-//   res.status(200).json({ message: "Signout successfully" });
-//   console.log(res);
-// };
+exports.getUserInformation = (req, res) => {
+  console.log(req);
+  User.findById(req.user._id)
+    .select("_id firstName lastName userName email dob phone")
+    .exec((error, user) => {
+      if (error) return res.status(400).json({ error });
+      if (user) return res.status(200).json({ user });
+    });
+};
 
 exports.updateUser = async (req, res) => {
 	const { _id } = req.user;
@@ -103,18 +107,3 @@ exports.updateUser = async (req, res) => {
 	}
 };
 
-exports.getUser = async (req, res) => {
-	try {
-		const user = req.user;
-
-		res.status(200).send({
-			success: 1,
-			data: user,
-		});
-	} catch (err) {
-		res.status(500).send({
-			success: 0,
-			message: err.message,
-		});
-	}
-};
