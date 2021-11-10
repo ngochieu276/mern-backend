@@ -18,7 +18,7 @@ router.post("/register", validateRegisterRequest, isRequestValidated, register);
 //   res.status(200).json({ user: "profile" });
 // });
 
-router.post("/update", tokenAuth, updateUser);
+router.put("/update", tokenAuth, updateUser);
 
 router.get("/me", tokenAuth, getUser);
 
