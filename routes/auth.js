@@ -1,5 +1,10 @@
 const express = require("express");
-const { login, register, getUserInformation } = require("../controllers/auth");
+const {
+  login,
+  register,
+  getUserInformation,
+  updateUser,
+} = require("../controllers/auth");
 const {
   requireSignin,
   userMiddleware,
@@ -15,6 +20,8 @@ const router = express.Router();
 router.post("/login", validateLoginRequest, isRequestValidated, login);
 
 router.post("/register", validateRegisterRequest, isRequestValidated, register);
+
+router.put("/updateUser", requireSignin, userMiddleware, updateUser);
 
 router.get("/me", requireSignin, getUserInformation);
 

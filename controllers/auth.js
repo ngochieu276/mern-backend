@@ -40,7 +40,7 @@ exports.login = (req, res) => {
   User.findOne({ email: req.body.email }).exec(async (error, user) => {
     if (error) return res.status(400).json({ error });
     if (user) {
-      const isValidPassword = user.authenticate(req.body.password);
+      const isValidPassword = await user.authenticate(req.body.password);
       if (isValidPassword && user.role === "user") {
         const token = jwt.sign(
           { _id: user._id, role: user.role },
@@ -78,11 +78,37 @@ exports.login = (req, res) => {
 };
 
 exports.getUserInformation = (req, res) => {
-  console.log(req);
   User.findById(req.user._id)
     .select("_id firstName lastName userName email dob phone")
     .exec((error, user) => {
       if (error) return res.status(400).json({ error });
       if (user) return res.status(200).json({ user });
     });
+};
+
+exports.updateUser = async (req, res) => {
+  const { _id } = req.user;
+  const updateData = req.body;
+
+  if (updateData.password) {
+    const newPassword = await bcrypt.hash(updateData.password, 10);
+    updateData.password = newPassword;
+  }
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(_id, updateData, {
+      new: true,
+    }).select("-hash_password -__v -createdAt -updatedAt");
+
+    res.status(200).json({
+      success: 1,
+      data: updatedUser,
+      message: "User info updated",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: 0,
+      message: err.message,
+    });
+  }
 };
