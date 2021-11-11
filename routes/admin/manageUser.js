@@ -1,14 +1,20 @@
 const express = require("express");
+const { getUsersByQuery } = require("../../controllers/admin/managerUser");
+
 const {
-  getAllUsers,
-  getUsersByQuery,
-} = require("../../controllers/admin/managerUser");
+  requireSignin,
+  userMiddleware,
+  adminMiddleware,
+} = require("../../common-middleware/index");
 
 const router = express.Router();
 
-router.get("/getAllUsers", getAllUsers);
-
-router.post("/getUsersByQuery", getUsersByQuery);
+router.post(
+  "/getUsersByQuery",
+  requireSignin,
+  adminMiddleware,
+  getUsersByQuery
+);
 
 // router.post("/profile", requireSignin, (req, res) => {
 //   res.status(200).json({ user: "profile" });
