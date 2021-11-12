@@ -21,7 +21,7 @@ router.post("/login", validateLoginRequest, isRequestValidated, login);
 
 router.post("/register", validateRegisterRequest, isRequestValidated, register);
 
-router.put("/updateUser", requireSignin, userMiddleware, updateUser);
+router.put("/update", requireSignin, userMiddleware, updateUser);
 
 router.get("/me", requireSignin, getUserInformation);
 

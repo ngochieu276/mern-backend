@@ -79,7 +79,7 @@ exports.login = (req, res) => {
 
 exports.getUserInformation = (req, res) => {
   User.findById(req.user._id)
-    .select("_id firstName lastName userName email dob phone")
+    .select("_id firstName lastName userName email dob phone profilePicture")
     .exec((error, user) => {
       if (error) return res.status(400).json({ error });
       if (user) return res.status(200).json({ user });
