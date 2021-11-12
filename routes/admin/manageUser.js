@@ -1,5 +1,10 @@
 const express = require("express");
-const { getUsersByQuery } = require("../../controllers/admin/managerUser");
+const {
+  getUsersByQuery,
+  createAdminUser,
+  updateAdminUser,
+  deleteAdminUser,
+} = require("../../controllers/admin/managerUser");
 
 const {
   requireSignin,
@@ -14,6 +19,30 @@ router.post(
   requireSignin,
   adminMiddleware,
   getUsersByQuery
+);
+router.post(
+  "/adminUser/create",
+  requireSignin,
+  adminMiddleware,
+  createAdminUser
+);
+router.post(
+  "/adminUser/create",
+  requireSignin,
+  adminMiddleware,
+  createAdminUser
+);
+router.put(
+  "/adminUser/update",
+  requireSignin,
+  adminMiddleware,
+  updateAdminUser
+);
+router.delete(
+  "/adminUser/delete",
+  requireSignin,
+  adminMiddleware,
+  deleteAdminUser
 );
 
 // router.post("/profile", requireSignin, (req, res) => {

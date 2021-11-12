@@ -1,5 +1,7 @@
 const User = require("../../models/user");
 
+const bcrypt = require("bcrypt");
+
 exports.getUsersByQuery = (req, res) => {
   if (req.body) {
     const { query } = req.body;
@@ -23,4 +25,51 @@ exports.getUsersByQuery = (req, res) => {
       if (users) return res.status(200).json({ users });
     });
   }
+};
+
+exports.createAdminUser = async (req, res) => {
+  const { userName, password } = req.body;
+
+  const hash_password = await bcrypt.hash(password, 10);
+
+  const _user = new User({
+    firstName: "default",
+    lastName: "default",
+    userName,
+    email: "default",
+    dob: new Date(),
+    phone: "default",
+    hash_password,
+    role: "admin",
+    createdBy: req.user._id,
+  });
+
+  _user.save((error, data) => {
+    if (error) {
+      return res.status(400).json({ message: "Something went wrong", error });
+    }
+    if (data) {
+      return res.status(201).json({
+        message: "Admin create successfull",
+      });
+    }
+  });
+};
+exports.updateAdminUser = async (req, res) => {
+  const { updateUser } = req.body;
+
+  User.findOneAndUpdate({ _id: updateUser.userId }, updateUser, {
+    new: true,
+  }).exec((user, error) => {
+    if (error) return res.status(400).json({ error });
+    if (user) return res.json(201).json({ user });
+  });
+};
+
+exports.deleteAdminUser = (req, res) => {
+  const { userId } = req.body;
+  User.deleteOne({ _id: userId }).exec((user, error) => {
+    if (error) return res.status(400).json({ error });
+    if (user) return res.json(202).json({ message: "delete success" });
+  });
 };
