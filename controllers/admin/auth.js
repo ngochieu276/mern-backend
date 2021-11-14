@@ -77,3 +77,9 @@ exports.login = (req, res) => {
     }
   });
 };
+
+exports.logout = (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({ message: "Signout successfully" });
+  console.log(res);
+};

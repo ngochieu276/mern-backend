@@ -1,5 +1,5 @@
 const express = require("express");
-const { login, register } = require("../../controllers/admin/auth");
+const { login, register, logout } = require("../../controllers/admin/auth");
 const {
   validateLoginRequest,
   validateRegisterRequest,
@@ -10,6 +10,8 @@ const router = express.Router();
 router.post("/login", validateLoginRequest, isRequestValidated, login);
 
 router.post("/register", validateRegisterRequest, isRequestValidated, register);
+
+router.post("/logout", logout);
 
 // router.post("/signout", signout);
 
