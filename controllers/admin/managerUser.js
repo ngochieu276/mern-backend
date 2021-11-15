@@ -44,13 +44,14 @@ exports.createAdminUser = async (req, res) => {
     createdBy: req.user._id,
   });
 
-  _user.save((error, data) => {
+  _user.save((error, user) => {
     if (error) {
       return res.status(400).json({ message: "Something went wrong", error });
     }
-    if (data) {
+    if (user) {
       return res.status(201).json({
         message: "Admin create successfull",
+        user,
       });
     }
   });
