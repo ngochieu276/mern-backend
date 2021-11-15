@@ -36,7 +36,7 @@ exports.createAdminUser = async (req, res) => {
     firstName: "default",
     lastName: "default",
     userName,
-    email: "default",
+    email: `${userName}@gmail.com`,
     dob: new Date(),
     phone: "default",
     hash_password,
