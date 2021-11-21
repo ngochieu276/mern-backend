@@ -20,6 +20,7 @@ router.post(
   adminMiddleware,
   getUsersByQuery
 );
+
 router.post(
   "/adminUser/create",
   requireSignin,
@@ -27,12 +28,6 @@ router.post(
   createAdminUser
 );
 router.post(
-  "/adminUser/create",
-  requireSignin,
-  adminMiddleware,
-  createAdminUser
-);
-router.put(
   "/adminUser/update",
   requireSignin,
   adminMiddleware,

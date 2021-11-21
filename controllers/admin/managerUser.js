@@ -58,12 +58,14 @@ exports.createAdminUser = async (req, res) => {
 };
 exports.updateAdminUser = async (req, res) => {
   const { updateUser } = req.body;
+  console.log(req.body);
 
-  User.findOneAndUpdate({ _id: updateUser.userId }, updateUser, {
+  await User.findOneAndUpdate({ _id: updateUser.userId }, updateUser, {
     new: true,
-  }).exec((user, error) => {
+  }).exec((error, user) => {
     if (error) return res.status(400).json({ error });
-    if (user) return res.json(201).json({ user });
+    if (user)
+      return res.status(201).json({ message: "update successfully", user });
   });
 };
 

@@ -11,6 +11,7 @@ const mongoose = require("mongoose");
 const userRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin/auth");
 const manageUserRoutes = require("./routes/admin/manageUser");
+const manageProductRoutes = require("./routes/admin/manageProduct");
 
 // enviroment variable or you can say constant
 env.config();
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api", manageUserRoutes);
+app.use("/api", manageProductRoutes);
 
 mongoose
   .connect(
