@@ -1,33 +1,77 @@
 const Cart = require("../models/cart");
-// const Product = require("../models/product")
 
 const getCart = async (userId) => {
-	// to be changed, also return totalPrice and totalQuantity
-	const cart = await Cart.findOne({ userId: userId }).populate({
-		path: "products",
-		select: "-__v",
-	});
+	const cart = await Cart.findOne({ userId: userId })
+		.select("-__v")
+		.populate({
+			path: "products",
+			populate: {
+				path: "product",
+				select: "-__v -photos -tags",
+			},
+		})
+		.lean();
 
 	if (!cart) throw new Error("Empty cart");
+
+	const calculateTotal = (array) => {
+		const listed = array
+			.map((e) => e.product.listedPrice * e.quantity)
+			.reduce((prev, current) => prev + current, 0);
+
+		const discount = array
+			.map((e) => e.product.discountPrice * e.quantity)
+			.reduce((prev, current) => prev + current, 0);
+
+		return {
+			listedTotal: listed,
+			discountTotal: discount,
+		};
+	};
+
+	const { listedTotal, discountTotal } = calculateTotal(cart.products);
+
+	cart.itemCount = cart.products.length;
+	cart.listedTotal = listedTotal;
+	cart.discountTotal = discountTotal;
 
 	return cart;
 };
 
-const addToCart = async ({ userId, products }) => {
+const addToCart = async ({ userId, productId, quantity }) => {
 	const cart = await Cart.findOne({ userId: userId });
+	const item = {
+		product: productId,
+		quantity,
+	};
 
+	// Create cart if there is none
 	if (!cart) {
 		const newCart = await Cart.create({
 			userId,
-			products,
+			products: [item],
 		});
 
 		return newCart;
 	}
 
-	const newCart = cart.products.concat(products);
+	let itemExisted = false;
+	// Add quantity if item already in cart
+	cart.products.forEach((product) => {
+		if (product.product.toString() === productId) {
+			product.quantity += quantity;
+			itemExisted = true;
+		}
+	});
 
-	return newCart;
+	// Add item to cart
+	if (!itemExisted) {
+		cart.products.push(item);
+	}
+
+	await cart.save();
+
+	return cart;
 };
 
 const removeItem = async ({ userId, productId }) => {
@@ -35,7 +79,14 @@ const removeItem = async ({ userId, productId }) => {
 
 	if (!cart) throw new Error("Empty cart");
 
-	cart.products = cart.products.filter((product) => product !== productId);
+	cart.products = cart.products.filter(
+		(product) => product.product.toString() !== productId
+	);
+
+	if (!cart.products.length) {
+		await clearCart(userId);
+		throw new Error("Empty cart");
+	}
 
 	await cart.save();
 
@@ -47,20 +98,29 @@ const updateQuantity = async ({ userId, productId, quantity }) => {
 
 	if (!cart) throw new Error("Empty cart");
 
-	cart.products = cart.products.map((product) => {
-		if (product.productId == productId) {
-			product.quantity = quantity;
-		}
-		return product;
-	});
+	// remove item if quantity < 0
+	if (!quantity) {
+		cart.products = cart.products.filter(
+			(product) => product.product.toString() !== productId
+		);
+	}
+	// else update quantity
+	else {
+		cart.products = cart.products.map((product) => {
+			if (product.product.toString() == productId) {
+				product.quantity = quantity;
+			}
+			return product;
+		});
+	}
 
-  await cart.save();
+	await cart.save();
 
 	return cart;
 };
 
 const clearCart = async (userId) => {
-	await Cart.findByIdAndDelete(userId);
+	await Cart.findOneAndDelete({ userId });
 };
 
 module.exports = { getCart, addToCart, removeItem, updateQuantity, clearCart };

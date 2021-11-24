@@ -25,9 +25,13 @@ router.get("/", requireSignin, async (req, res) => {
 router.post("/", requireSignin, async (req, res) => {
 	try {
 		const userId = req.user._id;
-		const { products } = req.body;
+		const { productId, quantity } = req.body;
 
-		const newCart = await CartController.addToCart({ userId, products });
+		const newCart = await CartController.addToCart({
+			userId,
+			productId,
+			quantity,
+		});
 
 		res.send({
 			success: 1,
