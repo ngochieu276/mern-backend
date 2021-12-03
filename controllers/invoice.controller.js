@@ -1,4 +1,6 @@
 const Invoice = require("../models/invoice");
+const Cart = require("../models/cart");
+const Product = require("../models/product.js");
 
 const getAll = async ({ userId, status }) => {
 	const filter = status ? { userId, status } : { userId };
@@ -34,6 +36,16 @@ const addInvoice = async ({ userId, cartId, listedTotal, discountTotal }) => {
 		listedTotal,
 		discountTotal,
 		logs: [{ status: "checked_out", date: new Date() }],
+	});
+
+	const cart = await Cart.findById(cartId).lean();
+
+	const { products } = cart;
+
+	products.forEach(async (item) => {
+		await Product.findByIdAndUpdate(item.product, {
+			$inc: { quantity: -item.quantity },
+		});
 	});
 
 	return newInvoice;

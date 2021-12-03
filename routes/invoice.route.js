@@ -16,7 +16,7 @@ router.get("/", requireSignin, async (req, res) => {
 			data: invoices,
 		});
 	} catch (err) {
-		res.status(500).send({
+		res.send({
 			success: 0,
 			message: err.message,
 		});
@@ -33,7 +33,7 @@ router.get("/:invoiceId", requireSignin, async (req, res) => {
 			data: invoice,
 		});
 	} catch (err) {
-		res.status(500).send({
+		res.send({
 			success: 0,
 			message: err.message,
 		});
@@ -56,7 +56,7 @@ router.post("/", requireSignin, async (req, res) => {
 			data: newInvoice,
 		});
 	} catch (err) {
-		res.status(500).send({
+		res.send({
 			success: 0,
 			message: err.message,
 		});
