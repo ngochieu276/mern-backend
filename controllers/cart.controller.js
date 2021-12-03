@@ -4,11 +4,8 @@ const getCart = async (userId) => {
 	const cart = await Cart.findOne({ userId: userId })
 		.select("-__v")
 		.populate({
-			path: "products",
-			populate: {
-				path: "product",
-				select: "-__v -photos -tags",
-			},
+			path: "products.product",
+			select: "-__v",
 		})
 		.lean();
 
@@ -85,7 +82,7 @@ const removeItem = async ({ userId, productId }) => {
 
 	if (!cart.products.length) {
 		await clearCart(userId);
-		throw new Error("Empty cart");
+		return null;
 	}
 
 	await cart.save();

@@ -52,6 +52,13 @@ router.put("/item/remove", requireSignin, async (req, res) => {
 
 		const newCart = await CartController.removeItem({ userId, productId });
 
+		if (!newCart) {
+			res.send({
+				success: 1,
+				message: "Empty cart",
+			});
+		}
+
 		res.send({
 			success: 1,
 			data: newCart,
