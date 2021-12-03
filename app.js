@@ -14,6 +14,7 @@ const manageUserRoutes = require("./routes/admin/manageUser");
 const imageUploadRoutes = require("./routes/imageUpload.route");
 const cartRoutes = require("./routes/cart.route");
 const invoiceRoutes = require("./routes/invoice.route");
+const stripeRoutes = require("./routes/stripe.route")
 
 // enviroment variable or you can say constant
 env.config();
@@ -29,6 +30,7 @@ app.use("/api", manageUserRoutes);
 app.use("/api/image", imageUploadRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/invoice", invoiceRoutes);
+app.use("/api/stripe", stripeRoutes);
 
 mongoose
   .connect(
