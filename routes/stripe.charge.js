@@ -44,7 +44,7 @@ router.post("/charge", async (req, res) => {
 
 				res.send({
 					success: 1,
-          data: {chargeId: charge.id}, // return chargeId to do refund
+					data: { chargeId: charge.id }, // return chargeId to do refund
 					message: "Payment completed",
 				});
 			})
