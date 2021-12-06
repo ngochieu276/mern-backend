@@ -5,6 +5,8 @@ const {
   updateProduct,
   deleteProduct,
   getProductById,
+  getHotProducts,
+  getInSliderProducts,
 } = require("../../controllers/admin/managerProduct");
 
 const {
