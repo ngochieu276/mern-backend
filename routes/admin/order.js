@@ -7,10 +7,10 @@ const {
 } = require("../../controllers/admin/order");
 const router = express.Router();
 
-router.post("/admin/update", requireSignin, adminMiddleware, updateOrders);
+router.post("/update", requireSignin, adminMiddleware, updateOrders);
 
 router.get(
-  "/admin/getCustomerOrders",
+  "/getCustomerOrders",
   requireSignin,
   adminMiddleware,
   getCustomerOrders

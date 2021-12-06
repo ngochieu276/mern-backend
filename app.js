@@ -14,6 +14,7 @@ const manageUserRoutes = require("./routes/admin/manageUser");
 const imageUploadRoutes = require("./routes/imageUpload.route");
 const cartRoutes = require("./routes/cart.route");
 const manageProductRoutes = require("./routes/admin/managerProduct");
+const productRoutes = require("./routes/product");
 const manageOrderRoutes = require("./routes/admin/order");
 const orderRoutes = require("./routes/order");
 
@@ -30,8 +31,9 @@ app.use("/api/admin", adminRoutes);
 app.use("/api", manageUserRoutes);
 app.use("/api/image", imageUploadRoutes);
 app.use("/api/cart", cartRoutes);
-app.use("/api/product", manageProductRoutes);
-app.use("/api/order", manageOrderRoutes);
+app.use("/api/product/admin", manageProductRoutes);
+app.use("/api/product", productRoutes);
+app.use("/api/order/admin", manageOrderRoutes);
 app.use("/api/order", orderRoutes);
 
 mongoose
