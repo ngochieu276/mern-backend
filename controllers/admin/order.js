@@ -36,3 +36,14 @@ exports.getCustomOrderById = (req, res) => {
     return res.status(400).json({ error: "Params required" });
   }
 };
+
+exports.sortOrder = (req,res) => {
+  const {orderBy} = req.params
+  Order.find({})
+  .sort({createdAt: orderBy})
+  .exec((error, orders) => {
+    if (error) return res.status(400).json({ error });
+    if (orders) return res.status(200).json({ orders });
+  });
+}
+

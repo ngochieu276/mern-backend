@@ -2,7 +2,7 @@ const Product = require("../../models/product");
 
 exports.createProduct = (req, res) => {
   console.log(req.body);
-  const { name, listedPrice, discountPrice, quantity, description, avatar } =
+  const { name, listedPrice, discountPrice, quantity, description, avatar,photos } =
     req.body;
 
   // let photos = [];
@@ -19,7 +19,7 @@ exports.createProduct = (req, res) => {
     is_hot: false,
     in_slider: false,
     avatar,
-    // photos,
+    photos,
     quantity,
     description,
     tags: [],
