@@ -36,7 +36,7 @@ const productSchema = new mongoose.Schema(
     },
     profilePicture: { type: String },
     createdAt: { type: Date },
-    createBy: {
+    createdBy: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
       required: true,
