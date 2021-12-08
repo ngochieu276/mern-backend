@@ -24,3 +24,15 @@ exports.getCustomerOrders = async (req, res) => {
     .exec();
   res.status(200).json({ orders });
 };
+
+exports.getCustomOrderById = (req, res) => {
+  const { orderId } = req.params;
+  if (orderId) {
+    Order.findOne({ _id: orderId }).exec((error, order) => {
+      if (error) return res.status(400).json({ error });
+      if (order) return res.status(200).json({ order });
+    });
+  } else {
+    return res.status(400).json({ error: "Params required" });
+  }
+};

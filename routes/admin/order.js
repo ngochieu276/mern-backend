@@ -4,6 +4,7 @@ const { requireSignin } = require("../../common-middleware");
 const {
   updateOrders,
   getCustomerOrders,
+  getCustomOrderById,
 } = require("../../controllers/admin/order");
 const router = express.Router();
 
@@ -15,5 +16,7 @@ router.get(
   adminMiddleware,
   getCustomerOrders
 );
+
+router.get("/:orderId", requireSignin, adminMiddleware, getCustomOrderById);
 
 module.exports = router;
