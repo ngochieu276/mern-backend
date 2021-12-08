@@ -23,7 +23,7 @@ const productSchema = new mongoose.Schema(
     avatar: {
       type: String,
     },
-    photos: [{ img: { type: String } }],
+    photos: [  ],
     quantity: {
       type: Number,
     },

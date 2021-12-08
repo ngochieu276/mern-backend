@@ -5,6 +5,7 @@ const {
   updateOrders,
   getCustomerOrders,
   getCustomOrderById,
+  sortOrder
 } = require("../../controllers/admin/order");
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.get(
   adminMiddleware,
   getCustomerOrders
 );
+router.get('/sort/:orderBy', requireSignin,adminMiddleware,sortOrder)
 
 router.get("/:orderId", requireSignin, adminMiddleware, getCustomOrderById);
 
