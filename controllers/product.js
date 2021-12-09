@@ -20,23 +20,20 @@ exports.getProductById = (req, res) => {
 };
 
 exports.getProductsByQuery = (req, res) => {
-  if (req.body) {
-    const { query } = req.body;
-    Product.find({
-      $or: [{ name: { $regex: query } }, { description: { $regex: query } }],
-    }).exec((error, products) => {
-      if (error) return res.status(400).json({ error });
-      if (products)
-        return res
-          .status(200)
-          .json({ products, meta: { total: 10, skip: 10, limit: 10 } });
-    });
-  } else {
-    Product.find({}).exec((error, products) => {
-      if (error) return res.status(400).json({ error });
-      if (products) return res.status(200).json({ products });
-    });
-  }
+  const { queryString } = req.query;
+  Product.find({
+    $or: [
+      { name: { $regex: queryString } },
+      { description: { $regex: queryString } },
+    ],
+  }).exec((error, products) => {
+    if (error) return res.status(400).json({ error });
+    if (products)
+      return res.status(200).json({
+        products,
+        meta: { total: products.length, skip: 6, limit: 5 },
+      });
+  });
 };
 
 exports.getHotProducts = (req, res) => {
