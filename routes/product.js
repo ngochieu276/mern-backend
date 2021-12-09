@@ -8,11 +8,10 @@ const {
 } = require("../controllers/product");
 
 const router = express.Router();
-
+router.get("/", getProductsByQuery);
+router.get("/getAll", getAllProducts);
 router.get("/isHot", getHotProducts);
 router.get("/inSlider", getInSliderProducts);
 router.get("/:productId", getProductById);
-router.get("/", getProductsByQuery);
-router.get("/", getAllProducts);
 
 module.exports = router;

@@ -3,7 +3,10 @@ const Product = require("../models/product");
 exports.getAllProducts = (req, res) => {
   Product.find({}).exec((error, products) => {
     if (error) return res.status(400).json({ error });
-    if (products) return res.status(200).json({ products });
+    if (products)
+      return res
+        .status(200)
+        .json({ products, total: products.length, skip: 6, limit: 5 });
   });
 };
 
@@ -20,11 +23,11 @@ exports.getProductById = (req, res) => {
 };
 
 exports.getProductsByQuery = (req, res) => {
-  const { queryString } = req.query;
+  const { queryStr } = req.query;
   Product.find({
     $or: [
-      { name: { $regex: queryString } },
-      { description: { $regex: queryString } },
+      { name: { $regex: queryStr } },
+      { description: { $regex: queryStr } },
     ],
   }).exec((error, products) => {
     if (error) return res.status(400).json({ error });
