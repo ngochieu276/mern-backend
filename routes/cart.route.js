@@ -15,8 +15,8 @@ router.get("/", requireSignin, async (req, res) => {
 			data: cart,
 		});
 	} catch (err) {
-		res.status(500).send({
-			success: 0,
+		res.send({
+			success: 1,
 			message: err.message,
 		});
 	}
