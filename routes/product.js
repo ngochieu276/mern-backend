@@ -3,13 +3,11 @@ const {
   getHotProducts,
   getInSliderProducts,
   getProductById,
-  getProductsByQuery,
-  getAllProducts,
+  getProducts,
 } = require("../controllers/product");
 
 const router = express.Router();
-router.get("/", getProductsByQuery);
-router.get("/getAll", getAllProducts);
+router.get("/", getProducts);
 router.get("/isHot", getHotProducts);
 router.get("/inSlider", getInSliderProducts);
 router.get("/:productId", getProductById);
