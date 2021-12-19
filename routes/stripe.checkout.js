@@ -12,8 +12,6 @@ router.post("/create-payment-intent", requireSignin, async (req, res) => {
 	try {
 		const cart = await CartController.getCart(userId);
 
-		console.log("amount", cart.discountTotal);
-
 		const paymentIntent = await stripe.paymentIntents.create({
 			amount: cart.discountTotal * 100,
 			currency: "usd",
