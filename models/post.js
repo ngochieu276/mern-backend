@@ -5,10 +5,12 @@ const PostSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+
   title: {
     type: String,
     required: true,
   },
+  tags: [],
   createdAt: { type: Date },
   createdBy: {
     type: mongoose.Schema.ObjectId,

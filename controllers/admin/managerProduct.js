@@ -2,8 +2,16 @@ const Product = require("../../models/product");
 
 exports.createProduct = (req, res) => {
   console.log(req.body);
-  const { name, listedPrice, discountPrice, quantity, description, avatar,photos } =
-    req.body;
+  const {
+    name,
+    listedPrice,
+    discountPrice,
+    quantity,
+    description,
+    avatar,
+    photos,
+    tags,
+  } = req.body;
 
   // let photos = [];
   // if (req.files.length > 0) {
@@ -22,7 +30,7 @@ exports.createProduct = (req, res) => {
     photos,
     quantity,
     description,
-    tags: [],
+    tags,
     supplier: "none",
     profilePicture: "",
     createdAt: new Date(),
