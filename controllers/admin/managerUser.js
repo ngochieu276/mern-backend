@@ -27,6 +27,18 @@ exports.getUsersByQuery = (req, res) => {
   }
 };
 
+exports.getUserById = (req, res) => {
+  const { userId } = req.params;
+  if (userId) {
+    User.findOne({ _id: userId }).exec((error, user) => {
+      if (error) return res.status(400).json({ error });
+      if (user) return res.status(200).json({ user });
+    });
+  } else {
+    return res.status(400).json({ error: "Params required" });
+  }
+};
+
 exports.createAdminUser = async (req, res) => {
   const { userName, password } = req.body;
 
@@ -61,7 +73,7 @@ exports.updateAdminUser = async (req, res) => {
 
   User.findOneAndUpdate({ _id: updateUser.userId }, updateUser, {
     new: true,
-  }).exec((user, error) => {
+  }).exec((error, user) => {
     if (error) return res.status(400).json({ error });
     if (user) return res.json(201).json({ user });
   });
@@ -69,7 +81,7 @@ exports.updateAdminUser = async (req, res) => {
 
 exports.deleteAdminUser = (req, res) => {
   const { userId } = req.body;
-  User.deleteOne({ _id: userId }).exec((user, error) => {
+  User.deleteOne({ _id: userId }).exec((error, user) => {
     if (error) return res.status(400).json({ error });
     if (user) return res.json(202).json({ message: "delete success" });
   });

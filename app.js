@@ -19,6 +19,7 @@ const manageOrderRoutes = require("./routes/admin/order");
 const orderRoutes = require("./routes/order");
 const stripeCheckout = require("./routes/stripe.checkout");
 const managePost = require("./routes/admin/managePost");
+const postRoutes = require("./routes/post");
 
 // enviroment variable or you can say constant
 env.config();
@@ -39,6 +40,7 @@ app.use("/api/order/admin", manageOrderRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/stripe", stripeCheckout);
 app.use("/api/post/admin", managePost);
+app.use("/api/post", postRoutes);
 
 mongoose
   .connect(
