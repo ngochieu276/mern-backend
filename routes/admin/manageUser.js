@@ -4,6 +4,7 @@ const {
   createAdminUser,
   updateAdminUser,
   deleteAdminUser,
+  getUserById,
 } = require("../../controllers/admin/managerUser");
 
 const {
@@ -14,17 +15,12 @@ const {
 
 const router = express.Router();
 
+router.get("/adminUser/:userId", requireSignin, adminMiddleware, getUserById);
 router.post(
   "/getUsersByQuery",
   requireSignin,
   adminMiddleware,
   getUsersByQuery
-);
-router.post(
-  "/adminUser/create",
-  requireSignin,
-  adminMiddleware,
-  createAdminUser
 );
 router.post(
   "/adminUser/create",
