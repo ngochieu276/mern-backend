@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
 
 const PostSchema = new mongoose.Schema({
+  avatar: {
+    type: String,
+  },
   post: {
     type: String,
     require: true,

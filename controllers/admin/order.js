@@ -1,7 +1,46 @@
 const Order = require("../../models/order");
+const nodemailer = require("nodemailer");
+
+const sendEmai = (emailReceived, content) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    tls: { rejectUnauthorized: false },
+    auth: {
+      user: "ngochieustudy@gmail.com",
+      pass: "sieunhangao",
+    },
+  });
+
+  const mailOptions = {
+    from: "ngochieustudy@gmail.com",
+    to: emailReceived,
+    subject: "Your order status was change",
+    text: content,
+  };
+
+  transporter.sendMail(mailOptions, function (error, response) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(
+        "Email sent: " + response.envelope.from + response.envelope.to
+      );
+    }
+  });
+};
+
+const formatDate = (date) => {
+  if (date) {
+    const d = new Date(date);
+    return `${d.getFullYear()}--${
+      d.getMonth() + 1
+    }-${d.getDate()} ${d.getHours()}:${d.getMinutes()}`;
+  }
+  return "";
+};
 
 exports.updateOrders = (req, res) => {
-  Order.updateOne(
+  Order.findOneAndUpdate(
     { _id: req.body.orderId, "orderStatus.type": req.body.type },
     {
       $set: {
@@ -12,14 +51,26 @@ exports.updateOrders = (req, res) => {
         },
       },
     }
-  ).exec((error, order) => {
-    if (error) return res.status(400).json({ error });
-    if (order) return res.status(201).json({ order });
-  });
+  )
+    .populate("user", "email")
+    .exec((error, order) => {
+      if (error) return res.status(400).json({ error });
+      if (order) {
+        console.log("orderemai" + order.user.email);
+        sendEmai(
+          order.user.email,
+          `Your order status was change at ${formatDate(order.updatedAt)} to ${
+            req.body.type
+          }`
+        );
+        return res.status(201).json({ order });
+      }
+    });
 };
 
 exports.getCustomerOrders = async (req, res) => {
   const orders = await Order.find({})
+    .sort({ createdAt: -1 })
     .populate("items.productId", "_id name avatar")
     .exec();
   res.status(200).json({ orders });
