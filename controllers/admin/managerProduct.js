@@ -13,13 +13,6 @@ exports.createProduct = (req, res) => {
     tags,
   } = req.body;
 
-  // let photos = [];
-  // if (req.files.length > 0) {
-  //   photos = req.files.map((file) => {
-  //     return { img: file.filename };
-  //   });
-  // }
-
   const product = new Product({
     name,
     listedPrice,
@@ -73,6 +66,20 @@ exports.getProductsByQuery = (req, res) => {
       if (products) return res.status(200).json({ products });
     });
   }
+};
+
+exports.getHotProducts = (req, res) => {
+  Product.find({ is_hot: true }).exec((error, products) => {
+    if (error) return res.status(400).json({ error });
+    if (products) return res.status(200).json({ products });
+  });
+};
+
+exports.getInSliderProducts = (req, res) => {
+  Product.find({ in_slider: true }).exec((error, products) => {
+    if (error) return res.status(400).json({ error });
+    if (products) return res.status(200).json({ products });
+  });
 };
 
 exports.updateProduct = async (req, res) => {

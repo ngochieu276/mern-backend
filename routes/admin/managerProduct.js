@@ -17,6 +17,8 @@ const {
 
 const router = express.Router();
 
+router.get("/isHot", requireSignin, adminMiddleware, getHotProducts);
+router.get("/inSlider", requireSignin, adminMiddleware, getInSliderProducts);
 router.get("/:productId", requireSignin, adminMiddleware, getProductById);
 router.post("/create", requireSignin, adminMiddleware, createProduct);
 router.post(

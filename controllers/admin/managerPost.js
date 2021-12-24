@@ -1,9 +1,10 @@
 const Post = require("../../models/post");
 
 exports.createPost = (req, res) => {
-  const { postContent, postTitle, tags } = req.body;
+  const { postContent, postTitle, tags, avatar } = req.body;
 
   const post = new Post({
+    avatar,
     title: postTitle,
     post: postContent,
     tags,
@@ -19,6 +20,7 @@ exports.createPost = (req, res) => {
 
 exports.getPosts = (req, res) => {
   Post.find({})
+    .sort({ createdAt: -1 })
     .populate("createdBy")
     .exec((error, posts) => {
       if (error) return res.status(400).json({ error });
