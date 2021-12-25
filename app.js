@@ -8,6 +8,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 // routes
+const initialDataRoutes = require("./routes/admin/initial");
 const userRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin/auth");
 const manageUserRoutes = require("./routes/admin/manageUser");
@@ -31,6 +32,7 @@ app.use(express.json());
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api", manageUserRoutes);
+app.use("/api", initialDataRoutes);
 app.use("/api/image", imageUploadRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/product/admin", manageProductRoutes);

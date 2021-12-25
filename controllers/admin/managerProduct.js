@@ -108,7 +108,7 @@ exports.getInSliderProducts = (req, res) => {
 };
 
 exports.deleteProduct = (req, res) => {
-  const { productId } = req.body;
+  const { productId } = req.params;
   Product.deleteOne({ _id: productId }).exec((error, product) => {
     if (error) return res.status(400).json({ error });
     if (product) return res.status(202).json({ message: "delete success" });

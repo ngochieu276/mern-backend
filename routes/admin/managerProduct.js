@@ -29,6 +29,6 @@ router.post(
 );
 router.put("/update", requireSignin, adminMiddleware, updateProduct);
 
-router.delete("/delete", requireSignin, adminMiddleware, deleteProduct);
+router.delete("/:productId", requireSignin, adminMiddleware, deleteProduct);
 
 module.exports = router;
