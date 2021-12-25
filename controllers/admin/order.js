@@ -1,4 +1,5 @@
 const Order = require("../../models/order");
+const User = require("../../models/user");
 const nodemailer = require("nodemailer");
 
 const sendEmai = (emailReceived, content) => {
@@ -69,11 +70,31 @@ exports.updateOrders = (req, res) => {
 };
 
 exports.getCustomerOrders = async (req, res) => {
-  const orders = await Order.find({})
+  Order.find({})
     .sort({ createdAt: -1 })
     .populate("items.productId", "_id name avatar")
-    .exec();
-  res.status(200).json({ orders });
+    .populate("user", "userName email")
+    .exec((error, orders) => {
+      if (error) return res.status(400).json({ error });
+      if (orders) return res.status(200).json({ orders });
+    });
+};
+
+exports.getCustomerOrdersByEmail = async (req, res) => {
+  if (req.body) {
+    const { query } = req.body;
+    const user = await User.findOne({ email: query }).exec();
+    const userId = user._id;
+
+    Order.find({ user: userId })
+      .sort({ createdAt: -1 })
+      .populate("items.productId", "_id name avatar")
+      .populate("user", "userName email")
+      .exec((error, orders) => {
+        if (error) return res.status(400).json({ error });
+        if (orders) return res.status(200).json({ orders });
+      });
+  }
 };
 
 exports.getCustomOrderById = (req, res) => {

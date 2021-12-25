@@ -75,14 +75,15 @@ exports.updateAdminUser = async (req, res) => {
     new: true,
   }).exec((error, user) => {
     if (error) return res.status(400).json({ error });
-    if (user) return res.json(201).json({ user });
+    if (user) return res.status(201).json({ user });
   });
 };
 
 exports.deleteAdminUser = (req, res) => {
-  const { userId } = req.body;
+  const { userId } = req.params;
+
   User.deleteOne({ _id: userId }).exec((error, user) => {
     if (error) return res.status(400).json({ error });
-    if (user) return res.json(202).json({ message: "delete success" });
+    if (user) return res.status(202).json({ message: "delete success" });
   });
 };

@@ -35,7 +35,7 @@ router.put(
   updateAdminUser
 );
 router.delete(
-  "/adminUser/delete",
+  "/adminUser/:userId",
   requireSignin,
   adminMiddleware,
   deleteAdminUser
