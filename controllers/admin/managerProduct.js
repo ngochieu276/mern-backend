@@ -88,7 +88,7 @@ exports.updateProduct = async (req, res) => {
   Product.findOneAndUpdate({ _id: updateProduct.productId }, updateProduct, {
     new: true,
   }).exec((error, product) => {
-    if (error) return res.status(400).json({ error });
+    if (error) return res.status(400).json({ error, message: "update failed" });
     if (product) return res.status(201).json({ product });
   });
 };

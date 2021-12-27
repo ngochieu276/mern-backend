@@ -82,18 +82,74 @@ exports.getCustomerOrders = async (req, res) => {
 
 exports.getCustomerOrdersByEmail = async (req, res) => {
   if (req.body) {
-    const { query } = req.body;
-    const user = await User.findOne({ email: query }).exec();
-    const userId = user._id;
-
-    Order.find({ user: userId })
-      .sort({ createdAt: -1 })
-      .populate("items.productId", "_id name avatar")
-      .populate("user", "userName email")
-      .exec((error, orders) => {
+    const { query, startDate, endDate } = req.body;
+    if (!startDate && !endDate && query) {
+      User.findOne({ email: query }).exec((error, user) => {
         if (error) return res.status(400).json({ error });
-        if (orders) return res.status(200).json({ orders });
+        if (user) {
+          Order.find({ user: user._id })
+            .sort({ createdAt: -1 })
+            .populate("items.productId", "_id name avatar")
+            .populate("user", "userName email")
+            .exec((error, orders) => {
+              if (error) return res.status(400).json({ error });
+              if (orders) return res.status(200).json({ orders });
+            });
+        } else if (!user) {
+          res.status(400).json({
+            error: "No user found, please write exactly userEmail",
+          });
+        }
       });
+    } else if (startDate && endDate && query) {
+      let isoStartDate = new Date(startDate).toISOString();
+      let isoEndDate = new Date(endDate).toISOString();
+      isoStartDate = isoStartDate.slice(0, -1) + "+00:00";
+      isoEndDate = isoEndDate.slice(0, -1) + "+00:00";
+      User.findOne({ email: query }).exec((error, user) => {
+        if (error) return res.status(400).json({ error });
+        if (user) {
+          Order.find({
+            $and: [
+              {
+                user: user._id,
+              },
+              { createdAt: { $lte: isoEndDate } },
+              { createdAt: { $gte: isoStartDate } },
+            ],
+          })
+            .sort({ createdAt: -1 })
+            .populate("items.productId", "_id name avatar")
+            .populate("user", "userName email")
+            .exec((error, orders) => {
+              if (error) return res.status(400).json({ error });
+              if (orders) return res.status(200).json({ orders });
+            });
+        } else if (!user) {
+          res.status(400).json({
+            error: "No user found, please write exactly userEmail",
+          });
+        }
+      });
+    } else if (startDate && endDate && !query) {
+      let isoStartDate = new Date(startDate).toISOString();
+      let isoEndDate = new Date(endDate).toISOString();
+      isoStartDate = isoStartDate.slice(0, -1) + "+00:00";
+      isoEndDate = isoEndDate.slice(0, -1) + "+00:00";
+      Order.find({
+        $and: [
+          { createdAt: { $lte: isoEndDate } },
+          { createdAt: { $gte: isoStartDate } },
+        ],
+      })
+        .sort({ createdAt: -1 })
+        .populate("items.productId", "_id name avatar")
+        .populate("user", "userName email")
+        .exec((error, orders) => {
+          if (error) return res.status(400).json({ error });
+          if (orders) return res.status(200).json({ orders });
+        });
+    }
   }
 };
 
@@ -115,6 +171,8 @@ exports.sortOrder = (req, res) => {
   const { orderBy } = req.params;
   Order.find({})
     .sort({ createdAt: orderBy })
+    .populate("items.productId", "_id name avatar")
+    .populate("user", "userName email")
     .exec((error, orders) => {
       if (error) return res.status(400).json({ error });
       if (orders) return res.status(200).json({ orders });

@@ -2,6 +2,7 @@ const Product = require("../models/product");
 
 exports.getProducts = (req, res) => {
   const { page, perPage, name, maxPrice, minPrice, tag } = req.query;
+  console.log(tag);
   const options = {
     page: parseInt(page, 10),
     limit: parseInt(perPage, 10),
@@ -42,7 +43,7 @@ exports.getProducts = (req, res) => {
         res.status(400).json(err);
       });
   } else if (tag) {
-    Product.paginate({ tags: { $in: [tag] } }, options)
+    Product.paginate({ tags: { $all: [...tag] } }, options)
       .then((products) => {
         res.status(200).json(products);
       })
