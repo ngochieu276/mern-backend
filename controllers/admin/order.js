@@ -1,6 +1,8 @@
 const Order = require("../../models/order");
 const User = require("../../models/user");
+const Report = require("../../models/report");
 const nodemailer = require("nodemailer");
+const product = require("../../models/product");
 
 const sendEmai = (emailReceived, content) => {
   const transporter = nodemailer.createTransport({
@@ -57,13 +59,24 @@ exports.updateOrders = (req, res) => {
     .exec((error, order) => {
       if (error) return res.status(400).json({ error });
       if (order) {
-        console.log("orderemai" + order.user.email);
         sendEmai(
           order.user.email,
           `Your order status was change at ${formatDate(order.updatedAt)} to ${
             req.body.type
           }`
         );
+        const report = new Report({
+          actionBy: req.user._id,
+          action: "update",
+          field: "order",
+          content: {
+            userName: req.user.userName,
+            role: req.user.role,
+            orderId: order._id,
+            type: req.body.type,
+          },
+        });
+        report.save();
         return res.status(201).json({ order });
       }
     });

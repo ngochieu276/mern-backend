@@ -1,0 +1,18 @@
+const express = require("express");
+const { adminMiddleware } = require("../../common-middleware");
+const { requireSignin } = require("../../common-middleware");
+const {
+  getReports,
+  advangeSearchReports,
+} = require("../../controllers/admin/report");
+const router = express.Router();
+
+router.get("/", requireSignin, adminMiddleware, getReports);
+router.post(
+  "/advangeSearchReports",
+  requireSignin,
+  adminMiddleware,
+  advangeSearchReports
+);
+
+module.exports = router;

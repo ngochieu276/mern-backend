@@ -1,5 +1,6 @@
 const Order = require("../models/order");
 const Cart = require("../models/cart");
+const Report = require("../models/report");
 
 const nodemailer = require("nodemailer");
 
@@ -44,7 +45,6 @@ exports.addOrder = (req, res) => {
     if (error) return res.status(400).json({ error });
     if (result) {
       req.body.user = req.user._id;
-      console.log("49" + req.user.role + " " + req.user.email);
       req.body.orderStatus = [
         {
           type: "ordered",
@@ -73,6 +73,17 @@ exports.addOrder = (req, res) => {
             req.user.email,
             `Your order was created at ${formatDate(order.createdAt)}`
           );
+          const report = new Report({
+            actionBy: req.user._id,
+            action: "create",
+            field: "order",
+            content: {
+              role: req.user.role,
+              userName: req.user.userName,
+              orderId: order._id,
+            },
+          });
+          report.save();
           return res.status(201).json({ order });
         }
       });

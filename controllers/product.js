@@ -43,7 +43,16 @@ exports.getProducts = (req, res) => {
         res.status(400).json(err);
       });
   } else if (tag) {
-    Product.paginate({ tags: { $all: [...tag] } }, options)
+    Product.paginate(
+      {
+        $or: [
+          { tags: { $all: [...tag] } },
+          { tags: { $in: tag[0] } },
+          { tags: { $in: tag[1] } },
+        ],
+      },
+      options
+    )
       .then((products) => {
         res.status(200).json(products);
       })
