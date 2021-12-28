@@ -5,6 +5,7 @@ exports.getPosts = (req, res) => {
   const options = {
     page: parseInt(page, 10),
     limit: parseInt(perPage, 10),
+    populate: "createdBy",
   };
 
   if (tag) {
@@ -44,6 +45,7 @@ exports.getPosts = (req, res) => {
       .then((posts) => {
         res.status(200).json(posts);
       })
+
       .catch((err) => {
         res.status(400).json(err);
       });
