@@ -8,7 +8,16 @@ exports.getPosts = (req, res) => {
   };
 
   if (tag) {
-    Post.paginate({ tags: { $all: [...tag] } }, options)
+    Post.paginate(
+      {
+        $or: [
+          { tags: { $all: [...tag] } },
+          { tags: { $in: tag[0] } },
+          { tags: { $in: tag[1] } },
+        ],
+      },
+      options
+    )
       .then((posts) => {
         res.status(200).json(posts);
       })

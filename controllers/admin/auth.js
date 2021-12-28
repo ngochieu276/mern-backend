@@ -43,7 +43,12 @@ exports.login = (req, res) => {
       const isValidPassword = await user.authenticate(req.body.password);
       if (isValidPassword && user.role === "admin") {
         const token = jwt.sign(
-          { _id: user._id, role: user.role },
+          {
+            _id: user._id,
+            role: user.role,
+            email: user.email,
+            userName: user.userName,
+          },
           process.env.JWT_SECRET,
           {
             expiresIn: "1h",
