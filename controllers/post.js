@@ -8,22 +8,37 @@ exports.getPosts = (req, res) => {
   };
 
   if (tag) {
-    Post.paginate(
-      {
-        $or: [
-          { tags: { $all: [...tag] } },
-          { tags: { $in: tag[0] } },
-          { tags: { $in: tag[1] } },
-        ],
-      },
-      options
-    )
-      .then((posts) => {
-        res.status(200).json(posts);
-      })
-      .catch((err) => {
-        res.status(400).json(err);
-      });
+    if (Array.isArray(tag)) {
+      Post.paginate(
+        {
+          $or: [
+            { tags: { $all: [...tag] } },
+            { tags: { $in: tag[0] } },
+            { tags: { $in: tag[1] } },
+          ],
+        },
+        options
+      )
+        .then((posts) => {
+          res.status(200).json(posts);
+        })
+        .catch((err) => {
+          res.status(400).json(err);
+        });
+    } else {
+      Post.paginate(
+        {
+          tags: { $in: tag },
+        },
+        options
+      )
+        .then((posts) => {
+          res.status(200).json(posts);
+        })
+        .catch((err) => {
+          res.status(400).json(err);
+        });
+    }
   } else {
     Post.paginate({}, options)
       .then((posts) => {
