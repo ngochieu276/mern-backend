@@ -43,22 +43,37 @@ exports.getProducts = (req, res) => {
         res.status(400).json(err);
       });
   } else if (tag) {
-    Product.paginate(
-      {
-        $or: [
-          { tags: { $all: [...tag] } },
-          { tags: { $in: tag[0] } },
-          { tags: { $in: tag[1] } },
-        ],
-      },
-      options
-    )
-      .then((products) => {
-        res.status(200).json(products);
-      })
-      .catch((err) => {
-        res.status(400).json(err);
-      });
+    if (Array.isArray(tag)) {
+      Product.paginate(
+        {
+          $or: [
+            { tags: { $all: [...tag] } },
+            { tags: { $in: tag[0] } },
+            { tags: { $in: tag[1] } },
+          ],
+        },
+        options
+      )
+        .then((products) => {
+          res.status(200).json(products);
+        })
+        .catch((err) => {
+          res.status(400).json(err);
+        });
+    } else {
+      Product.paginate(
+        {
+          tags: { $in: tag },
+        },
+        options
+      )
+        .then((products) => {
+          res.status(200).json(products);
+        })
+        .catch((err) => {
+          res.status(400).json(err);
+        });
+    }
   } else {
     Product.paginate({}, options)
       .then((products) => {
