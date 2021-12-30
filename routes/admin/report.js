@@ -4,6 +4,7 @@ const { requireSignin } = require("../../common-middleware");
 const {
   getReports,
   advangeSearchReports,
+  updateReportsToChecked,
 } = require("../../controllers/admin/report");
 const router = express.Router();
 
@@ -13,6 +14,12 @@ router.post(
   requireSignin,
   adminMiddleware,
   advangeSearchReports
+);
+router.get(
+  "/updateReportsToChecked",
+  requireSignin,
+  adminMiddleware,
+  updateReportsToChecked
 );
 
 module.exports = router;

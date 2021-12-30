@@ -52,6 +52,7 @@ exports.updateOrders = (req, res) => {
           type: req.body.type,
           isCompleted: true,
         },
+        status: req.body.type,
       },
     }
   )
@@ -69,6 +70,7 @@ exports.updateOrders = (req, res) => {
           actionBy: req.user._id,
           action: "update",
           field: "order",
+          isChecked: false,
           content: {
             userName: req.user.userName,
             role: req.user.role,

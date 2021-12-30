@@ -25,7 +25,7 @@ const sendEmai = (emailReceived, content) => {
     if (error) {
       console.log(error);
     } else {
-      console.log("Email sent: " + response.response);
+      console.log("Email senttttttttttttttt: " + response.response);
     }
   });
 };
@@ -52,11 +52,7 @@ exports.addOrder = (req, res) => {
           date: new Date(),
         },
         {
-          type: "packed",
-          isCompleted: false,
-        },
-        {
-          type: "shipped",
+          type: "inprogress",
           isCompleted: false,
         },
         {
@@ -77,6 +73,7 @@ exports.addOrder = (req, res) => {
             actionBy: req.user._id,
             action: "create",
             field: "order",
+            isChecked: false,
             content: {
               role: req.user.role,
               userName: req.user.userName,
@@ -92,25 +89,82 @@ exports.addOrder = (req, res) => {
 };
 
 exports.getOrders = (req, res) => {
-  Order.find({ user: req.user._id })
-    .select("_id paymentStatus paymentType orderStatus items")
-    .populate("items.productId", "_id name avatar")
-    .exec((error, orders) => {
-      if (error) return res.status(400).json({ error });
-      if (orders) {
-        res.status(200).json({ orders });
-      }
+  const { page, perPage } = req.query;
+  const options = {
+    page: parseInt(page, 10),
+    limit: parseInt(perPage, 10),
+    populate: "items.productId",
+  };
+  Order.paginate({ user: req.user._id }, options)
+    .then((orders) => {
+      res.status(200).json(orders);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
     });
 };
 
 exports.getOrder = (req, res) => {
-  Order.findOne({ _id: req.body.orderId })
+  const { orderId } = req.params;
+  Order.findOne({ _id: orderId })
     .populate("items.productId", "_id name avatar")
     .lean()
     .exec((error, order) => {
       if (error) return res.status(400).json({ error });
       if (order) {
         return res.status(200).json({ order });
+      }
+    });
+};
+
+exports.cancelOrder = (req, res) => {
+  Order.findOne({ _id: req.body.orderId })
+    .populate("items.productId")
+    .lean()
+    .exec((error, order) => {
+      if (error) return res.status(400).json({ error });
+      if (order) {
+        if (order.status === "inprogress") {
+          return res
+            .status(400)
+            .json({ message: "Already in process,cannot cancel" });
+        } else {
+          Order.findOneAndUpdate(
+            { _id: order._id },
+            {
+              $set: {
+                status: "cancel",
+                isCancel: true,
+              },
+            }
+          )
+            .populate("items.productId")
+            .exec((error, order) => {
+              if (error) return res.status(400).json({ error });
+              if (order) {
+                sendEmai(
+                  req.user.email,
+                  `You was cancel an order at ${formatDate(
+                    order.updatedAt
+                  )} , to re-buy, click here`
+                );
+                const report = new Report({
+                  actionBy: req.user._id,
+                  action: "delete",
+                  field: "order",
+                  isChecked: false,
+                  content: {
+                    userName: req.user.userName,
+                    role: req.user.role,
+                    orderId: order._id,
+                    type: "cancel",
+                  },
+                });
+                report.save();
+                return res.status(201).json({ order });
+              }
+            });
+        }
       }
     });
 };

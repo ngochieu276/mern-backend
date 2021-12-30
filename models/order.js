@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const orderSchema = new mongoose.Schema(
   {
@@ -28,10 +29,14 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
-    paymentStatus: {
+    status: {
       type: String,
       required: true,
-      enum: ["pending", "completed", "cancelled", "refund"],
+      default: "order",
+    },
+    isCancel: {
+      type: Boolean,
+      default: false,
     },
     paymentType: {
       type: String,
@@ -42,7 +47,7 @@ const orderSchema = new mongoose.Schema(
       {
         type: {
           type: String,
-          enum: ["ordered", "packed", "shipped", "delivered"],
+          enum: ["ordered", "inprogress", "delivered"],
           default: "order",
         },
         date: {
@@ -57,5 +62,7 @@ const orderSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+orderSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("Order", orderSchema);
