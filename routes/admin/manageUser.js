@@ -5,6 +5,7 @@ const {
   updateAdminUser,
   deleteAdminUser,
   getUserById,
+  updateAllUsers,
 } = require("../../controllers/admin/managerUser");
 
 const {
@@ -34,6 +35,7 @@ router.put(
   adminMiddleware,
   updateAdminUser
 );
+
 router.delete(
   "/adminUser/:userId",
   requireSignin,

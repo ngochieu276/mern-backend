@@ -52,11 +52,11 @@ exports.addOrder = (req, res) => {
           date: new Date(),
         },
         {
-          type: "inprogress",
+          type: "in_progress",
           isCompleted: false,
         },
         {
-          type: "delivered",
+          type: "completed",
           isCompleted: false,
         },
       ];
@@ -94,6 +94,7 @@ exports.getOrders = (req, res) => {
     page: parseInt(page, 10),
     limit: parseInt(perPage, 10),
     populate: "items.productId",
+    sort: { createdAt: -1 },
   };
   Order.paginate({ user: req.user._id }, options)
     .then((orders) => {
@@ -124,7 +125,7 @@ exports.cancelOrder = (req, res) => {
     .exec((error, order) => {
       if (error) return res.status(400).json({ error });
       if (order) {
-        if (order.status === "inprogress") {
+        if (order.status === "in_progress") {
           return res
             .status(400)
             .json({ message: "Already in process,cannot cancel" });
@@ -133,7 +134,7 @@ exports.cancelOrder = (req, res) => {
             { _id: order._id },
             {
               $set: {
-                status: "cancel",
+                status: "cancelled",
                 isCancel: true,
               },
             }
@@ -161,7 +162,9 @@ exports.cancelOrder = (req, res) => {
                   },
                 });
                 report.save();
-                return res.status(201).json({ order });
+                return res
+                  .status(201)
+                  .json({ order, message: "Success cancelled order" });
               }
             });
         }
