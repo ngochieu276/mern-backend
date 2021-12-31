@@ -5,6 +5,7 @@ const stripe = require("stripe")(
 );
 const { requireSignin } = require("../common-middleware/index");
 const CartController = require("../controllers/cart.controller");
+const { cancelOrder } = require("../controllers/order");
 
 router.post("/create-payment-intent", requireSignin, async (req, res) => {
 	const userId = req.user._id;
@@ -23,6 +24,28 @@ router.post("/create-payment-intent", requireSignin, async (req, res) => {
 		res.send({
 			success: 1,
 			clientSecret: paymentIntent.client_secret,
+		});
+	} catch (err) {
+		res.send({
+			success: 0,
+			message: err.message,
+		});
+	}
+});
+
+router.post("/refund", requireSignin, async (req, res) => {
+	const { paymentIntentId } = req.body;
+
+	try {
+		const refund = await stripe.refunds.create({
+			payment_intent: paymentIntentId,
+		});
+
+		cancelOrder(req, res);
+
+		res.send({
+			success: 1,
+			data: { refund, order },
 		});
 	} catch (err) {
 		res.send({
