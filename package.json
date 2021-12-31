@@ -22,6 +22,7 @@
     "mongoose-time-machine": "^1.0.3",
     "multer": "^1.4.3",
     "nodemailer": "^6.7.2",
+    "omit-deep": "^0.3.0",
     "shortid": "^2.2.16",
     "slugify": "^1.6.0",
     "stripe": "^8.194.0",
