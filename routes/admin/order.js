@@ -7,6 +7,7 @@ const {
   getCustomOrderById,
   getCustomerOrdersByEmail,
   sortOrder,
+  getOrderHistory,
 } = require("../../controllers/admin/order");
 const router = express.Router();
 
@@ -28,5 +29,11 @@ router.get(
 router.get("/sort/:orderBy", requireSignin, adminMiddleware, sortOrder);
 
 router.get("/:orderId", requireSignin, adminMiddleware, getCustomOrderById);
+router.get(
+  "/:orderId/histories",
+  requireSignin,
+  adminMiddleware,
+  getOrderHistory
+);
 
 module.exports = router;

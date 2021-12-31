@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
+const diffHistory = require("mongoose-diff-history/diffHistory");
 
 const orderSchema = new mongoose.Schema(
   {
@@ -32,7 +33,8 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      default: "order",
+      default: "ordered",
+      enum: ["ordered", "in_progress", "completed", "cancelled"],
     },
     isCancel: {
       type: Boolean,
@@ -47,8 +49,8 @@ const orderSchema = new mongoose.Schema(
       {
         type: {
           type: String,
-          enum: ["ordered", "inprogress", "delivered"],
-          default: "order",
+          enum: ["ordered", "in_progress", "completed"],
+          default: "ordered",
         },
         date: {
           type: Date,
@@ -64,5 +66,6 @@ const orderSchema = new mongoose.Schema(
 );
 
 orderSchema.plugin(mongoosePaginate);
+orderSchema.plugin(diffHistory.plugin);
 
 module.exports = mongoose.model("Order", orderSchema);

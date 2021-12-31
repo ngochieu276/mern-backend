@@ -1,4 +1,5 @@
 const Product = require("../../models/product");
+const diffHistory = require("mongoose-diff-history/diffHistory");
 
 exports.createProduct = (req, res) => {
   console.log(req.body);
@@ -41,7 +42,18 @@ exports.getProductById = (req, res) => {
   if (productId) {
     Product.findOne({ _id: productId }).exec((error, product) => {
       if (error) return res.status(400).json({ error });
-      if (product) return res.status(200).json({ product });
+      if (product) {
+        diffHistory
+          .getDiffs("Product", product._id, { select: "diff" })
+          .then((histories) => {
+            diffHistory
+              .getVersion(Product, product._id, 0)
+              .then((oldProduct) => {
+                return res.status(200).json({ product, histories, oldProduct });
+              });
+          })
+          .catch((error) => res.status(400).json({ error }));
+      }
     });
   } else {
     return res.status(400).json({ error: "Params required" });
