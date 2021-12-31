@@ -68,3 +68,15 @@ exports.getNews = (req, res) => {
       if (news) return res.status(200).json({ news });
     });
 };
+
+exports.getNewById = (req, res) => {
+  const { newId } = req.params;
+  if (newId) {
+    New.findOne({ _id: newId }).exec((error, newLetter) => {
+      if (error) return res.status(400).json({ error });
+      if (newLetter) return res.status(200).json({ newLetter });
+    });
+  } else {
+    return res.status(400).json({ error: "Params required" });
+  }
+};
