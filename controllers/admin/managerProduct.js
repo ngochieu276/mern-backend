@@ -42,7 +42,14 @@ exports.getProductById = (req, res) => {
     Product.findOne({ _id: productId }).exec((error, product) => {
       if (error) return res.status(400).json({ error });
       if (product) {
-        return res.status(200).json({ product });
+        Product.getDiffs(productId)
+          .then((histories) => {
+            console.log(histories);
+            return res.status(200).json({ product, histories });
+          })
+          .catch((error) => {
+            return res.status(400).json({ error });
+          });
       } else {
         return res.status(400).json({ error: "Product not found" });
       }
