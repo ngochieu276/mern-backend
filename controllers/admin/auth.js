@@ -20,6 +20,7 @@ exports.register = async (req, res) => {
     email,
     dob,
     phone,
+    receivedEmail: true,
     hash_password,
     role: "admin",
   });

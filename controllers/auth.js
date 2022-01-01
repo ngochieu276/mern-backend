@@ -19,6 +19,7 @@ exports.register = async (req, res) => {
     email,
     dob,
     phone,
+    receivedEmail: true,
     hash_password,
     role: "user",
   });
@@ -84,7 +85,9 @@ exports.login = (req, res) => {
 
 exports.getUserInformation = (req, res) => {
   User.findById(req.user._id)
-    .select("_id firstName lastName userName email dob phone profilePicture")
+    .select(
+      "_id firstName lastName userName email dob phone profilePicture receivedEmail"
+    )
     .exec((error, user) => {
       if (error) return res.status(400).json({ error });
       if (user) return res.status(200).json({ user });
