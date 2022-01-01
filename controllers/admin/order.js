@@ -2,8 +2,6 @@ const Order = require("../../models/order");
 const User = require("../../models/user");
 const Report = require("../../models/report");
 const nodemailer = require("nodemailer");
-const product = require("../../models/product");
-const diffHistory = require("mongoose-diff-history/diffHistory");
 
 const sendEmai = (emailReceived, content) => {
   const transporter = nodemailer.createTransport({
@@ -181,17 +179,6 @@ exports.getCustomOrderById = (req, res) => {
   } else {
     return res.status(400).json({ error: "Params required" });
   }
-};
-
-exports.getOrderHistory = (req, res) => {
-  const expandableFields = ["status"];
-  const { orderId } = req.params;
-  diffHistory
-    .getHistories("Order", orderId, expandableFields)
-    .then((histories) => {
-      res.json({ histories });
-    })
-    .catch((error) => console.log(error));
 };
 
 exports.sortOrder = (req, res) => {
