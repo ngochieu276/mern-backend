@@ -29,11 +29,5 @@ router.get(
 router.get("/sort/:orderBy", requireSignin, adminMiddleware, sortOrder);
 
 router.get("/:orderId", requireSignin, adminMiddleware, getCustomOrderById);
-router.get(
-  "/:orderId/histories",
-  requireSignin,
-  adminMiddleware,
-  getOrderHistory
-);
 
 module.exports = router;

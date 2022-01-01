@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
-const diffHistory = require("mongoose-diff-history/diffHistory");
 
 const orderSchema = new mongoose.Schema(
   {
@@ -67,6 +66,5 @@ const orderSchema = new mongoose.Schema(
 );
 
 orderSchema.plugin(mongoosePaginate);
-orderSchema.plugin(diffHistory.plugin);
 
 module.exports = mongoose.model("Order", orderSchema);
