@@ -41,11 +41,11 @@ router.post("/refund", requireSignin, async (req, res) => {
 			payment_intent: paymentIntentId,
 		});
 
-		cancelOrder(req, res);
+		// cancelOrder(req, res);
 
 		res.send({
 			success: 1,
-			data: { refund, order },
+			data: { refund },
 		});
 	} catch (err) {
 		res.send({
