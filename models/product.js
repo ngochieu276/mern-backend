@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
-const diffHistory = require("mongoose-time-machine").plugin;
 
 const productSchema = new mongoose.Schema(
   {
@@ -48,6 +47,5 @@ const productSchema = new mongoose.Schema(
 );
 
 productSchema.plugin(mongoosePaginate);
-productSchema.plugin(diffHistory, { name: "ProductHistory" });
 
 module.exports = mongoose.model("Product", productSchema);
