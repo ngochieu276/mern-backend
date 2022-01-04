@@ -3,7 +3,6 @@ const { check, validationResult } = require("express-validator");
 exports.validateRegisterRequest = [
   check("firstName").notEmpty().withMessage("firstname is required"),
   check("lastName").notEmpty().withMessage("lastname is required"),
-  check("userName").notEmpty().withMessage("UserName is required"),
   check("email").isEmail().withMessage("Valid Email is required"),
   check("dob").notEmpty().withMessage("Date of birth is required"),
   check("phone").notEmpty().withMessage("Valid phone is required"),
