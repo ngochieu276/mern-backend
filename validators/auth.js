@@ -4,8 +4,7 @@ exports.validateRegisterRequest = [
   check("firstName").notEmpty().withMessage("firstname is required"),
   check("lastName").notEmpty().withMessage("lastname is required"),
   check("email").isEmail().withMessage("Valid Email is required"),
-  check("dob").notEmpty().withMessage("Date of birth is required"),
-  check("phone").notEmpty().withMessage("Valid phone is required"),
+
   check("password")
     .isLength({ min: 6 })
     .withMessage("Password must 6 character long"),
