@@ -33,11 +33,9 @@ const userSchema = new mongoose.Schema(
     },
     dob: {
       type: Date,
-      required: true,
     },
     phone: {
       type: String,
-      required: true,
     },
     hash_password: {
       type: String,
