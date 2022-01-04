@@ -8,14 +8,13 @@ exports.register = async (req, res) => {
     if (user) return res.status(400).json({ message: "User already register" });
   });
 
-  const { firstName, lastName, userName, email, password, dob, phone } =
-    req.body;
+  const { firstName, lastName, email, password, dob, phone } = req.body;
   const hash_password = await bcrypt.hash(password, 10);
 
   const _user = new User({
     firstName,
     lastName,
-    userName,
+    userName: firstName + lastName + Math.floor(Math.random() * 1000),
     email,
     dob,
     phone,
