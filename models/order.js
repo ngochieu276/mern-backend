@@ -67,6 +67,7 @@ const orderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+		paymentIntentId: { type: String, required: true },
   },
   { timestamps: true }
 );
