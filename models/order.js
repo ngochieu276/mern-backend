@@ -60,6 +60,13 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
+    dayComplete: { type: Number },
+    monthComplete: { type: Number },
+    takeCaredBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
 		paymentIntentId: { type: String, required: true },
   },
   { timestamps: true }

@@ -49,6 +49,7 @@ exports.login = (req, res) => {
             role: user.role,
             email: user.email,
             userName: user.userName,
+            isMng: user.isMng,
           },
           process.env.JWT_SECRET,
           {
@@ -56,8 +57,17 @@ exports.login = (req, res) => {
           }
         );
 
-        const { _id, firstName, lastName, userName, email, dob, phone, role } =
-          user;
+        const {
+          _id,
+          firstName,
+          lastName,
+          userName,
+          email,
+          dob,
+          phone,
+          role,
+          isMng,
+        } = user;
         res.cookie("token", token, { expiresIn: "1d" });
 
         res.status(200).json({
@@ -71,6 +81,7 @@ exports.login = (req, res) => {
             dob,
             phone,
             role,
+            isMng,
           },
         });
       } else {

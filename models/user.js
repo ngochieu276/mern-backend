@@ -53,6 +53,10 @@ const userSchema = new mongoose.Schema(
     createdBy: {
       type: String,
     },
+    isMng: {
+      type: Boolean,
+      default: false,
+    },
     profilePicture: { type: String },
   },
   { timestamps: true }
