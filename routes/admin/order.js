@@ -7,7 +7,10 @@ const {
   getCustomOrderById,
   getCustomerOrdersByEmail,
   sortOrder,
-  getOrderHistory,
+  getUnCaredOrder,
+  getCaredOrder,
+  addOrderToAdmin,
+  manageOrderSearch,
 } = require("../../controllers/admin/order");
 const router = express.Router();
 
@@ -19,6 +22,18 @@ router.post(
   adminMiddleware,
   getCustomerOrdersByEmail
 );
+router.post(
+  "/addOrdersToAdmin",
+  requireSignin,
+  adminMiddleware,
+  addOrderToAdmin
+);
+router.post(
+  "/manageOrderSearch",
+  requireSignin,
+  adminMiddleware,
+  manageOrderSearch
+);
 
 router.get(
   "/getCustomerOrders",
@@ -26,6 +41,15 @@ router.get(
   adminMiddleware,
   getCustomerOrders
 );
+router.get("/getCaredOrders", requireSignin, adminMiddleware, getCaredOrder);
+
+router.get(
+  "/getUncaredOrders",
+  requireSignin,
+  adminMiddleware,
+  getUnCaredOrder
+);
+
 router.get("/sort/:orderBy", requireSignin, adminMiddleware, sortOrder);
 
 router.get("/:orderId", requireSignin, adminMiddleware, getCustomOrderById);
