@@ -6,11 +6,13 @@ const {
   getSaleByDay,
   getPopulateTags,
   getSalesByMonth,
+  getSalesByUsers,
 } = require("../../controllers/admin/summary");
 const router = express.Router();
 
-router.get("/getBestSalesProduct", getBestSalesProduct);
+router.get("/getSalesByUsers", getSalesByUsers);
 router.get("/getSalesByMonth", getSalesByMonth);
+router.post("/getBestSalesProduct", getBestSalesProduct);
 router.post("/getPopulateTags", getPopulateTags);
 router.post("/getSalesByDay", getSaleByDay);
 

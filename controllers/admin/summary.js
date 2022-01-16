@@ -4,8 +4,9 @@ const getIsoTime = (time) => {
 };
 
 exports.getBestSalesProduct = async (req, res) => {
+  const { month } = req.body;
   Order.aggregate([
-    { $match: { status: "completed" } },
+    { $match: { status: "completed", monthComplete: month } },
     { $unwind: "$items" },
     {
       $lookup: {
@@ -80,6 +81,37 @@ exports.getSalesByMonth = async (req, res) => {
         },
       },
     },
+  ]).exec((error, results) => {
+    if (error) {
+      return res.status(400).json({ error });
+    }
+    if (results) {
+      return res.status(200).json({ results });
+    }
+  });
+};
+
+exports.getSalesByUsers = (req, res) => {
+  Order.aggregate([
+    { $match: { status: "completed" } },
+    { $unwind: "$items" },
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "buyer",
+      },
+    },
+    {
+      $group: {
+        _id: "$buyer",
+        totalBuy: {
+          $sum: { $multiply: ["$items.payablePrice", "$items.purchaseQty"] },
+        },
+      },
+    },
+    { $sort: { totalBuy: -1 } },
   ]).exec((error, results) => {
     if (error) {
       return res.status(400).json({ error });
