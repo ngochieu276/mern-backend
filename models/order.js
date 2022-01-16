@@ -65,9 +65,8 @@ const orderSchema = new mongoose.Schema(
     takeCaredBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
-		paymentIntentId: { type: String, required: true },
+    paymentIntentId: { type: String, required: true },
   },
   { timestamps: true }
 );
