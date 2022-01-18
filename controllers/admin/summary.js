@@ -168,3 +168,66 @@ exports.getPopulateTags = (req, res) => {
     }
   });
 };
+
+exports.getRebuyPercent = (req, res) => {
+  const { atLeast } = req.body;
+  if (atLeast) {
+    Order.aggregate([
+      { $match: { status: "completed" } },
+      {
+        $group: {
+          _id: "$user",
+          buyTimes: { $sum: 1 },
+        },
+      },
+      {
+        $facet: {
+          data: [
+            {
+              $bucket: {
+                groupBy: "$buyTimes",
+                boundaries: [1, 2, atLeast, Infinity],
+              },
+            },
+          ],
+        },
+      },
+    ]).exec((error, results) => {
+      if (error) {
+        return res.status(400).json({ error });
+      }
+      if (results) {
+        return res.status(200).json({ results });
+      }
+    });
+  } else {
+    Order.aggregate([
+      { $match: { status: "completed" } },
+      {
+        $group: {
+          _id: "$user",
+          buyTimes: { $sum: 1 },
+        },
+      },
+      {
+        $facet: {
+          data: [
+            {
+              $bucket: {
+                groupBy: "$buyTimes",
+                boundaries: [1, 2, Infinity],
+              },
+            },
+          ],
+        },
+      },
+    ]).exec((error, results) => {
+      if (error) {
+        return res.status(400).json({ error });
+      }
+      if (results) {
+        return res.status(200).json({ results });
+      }
+    });
+  }
+};
