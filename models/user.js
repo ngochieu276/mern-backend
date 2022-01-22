@@ -57,6 +57,21 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    vouchers: [
+      {
+        type: {
+          type: String,
+          enum: ["discount5", "discount10", "discount15"],
+        },
+        date: {
+          type: Date,
+        },
+        isUsed: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    ],
     profilePicture: { type: String },
   },
   { timestamps: true }

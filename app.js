@@ -24,6 +24,7 @@ const postRoutes = require("./routes/post");
 const manageReportRoutes = require("./routes/admin/report");
 const manageNewsRoutes = require("./routes/admin/managerNew");
 const summaryRoutes = require("./routes/admin/summary");
+const loyalUserRoutes = require("./routes/admin/loyalUser");
 
 // enviroment variable or you can say constant
 env.config();
@@ -48,6 +49,7 @@ app.use("/api/post/admin", managePost);
 app.use("/api/post", postRoutes);
 app.use("/api/report/admin", manageReportRoutes);
 app.use("/api/new/admin", manageNewsRoutes);
+app.use("/api/loyal/admin", loyalUserRoutes);
 app.use("/api/summary", summaryRoutes);
 
 mongoose
