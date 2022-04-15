@@ -53,7 +53,7 @@ exports.login = (req, res) => {
           },
           process.env.JWT_SECRET,
           {
-            expiresIn: "1h",
+            expiresIn: "1d",
           }
         );
 
@@ -72,6 +72,10 @@ exports.login = (req, res) => {
 
         res.status(200).json({
           token,
+          expiresIn: {
+            now: new Date().getTime(),
+            then: new Date().getTime() + 10,
+          },
           user: {
             _id,
             firstName,

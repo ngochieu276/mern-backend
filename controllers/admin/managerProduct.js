@@ -95,6 +95,7 @@ exports.getInSliderProducts = (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   const { updateProduct } = req.body;
+  console.log(updateProduct.productId);
 
   Product.findOneAndUpdate({ _id: updateProduct.productId }, updateProduct, {
     new: true,
@@ -120,8 +121,9 @@ exports.getInSliderProducts = (req, res) => {
 
 exports.deleteProduct = (req, res) => {
   const { productId } = req.params;
-  Product.deleteOne({ _id: productId }).exec((error, product) => {
+
+  Product.deleteOne({ _id: productId }).exec((error, user) => {
     if (error) return res.status(400).json({ error });
-    if (product) return res.status(202).json({ message: "delete success" });
+    if (user) return res.status(202).json({ message: "delete success" });
   });
 };

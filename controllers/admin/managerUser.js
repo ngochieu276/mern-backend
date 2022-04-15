@@ -81,6 +81,7 @@ exports.updateAdminUser = async (req, res) => {
 
 exports.deleteAdminUser = (req, res) => {
   const { userId } = req.params;
+  console.log(req.params);
 
   User.deleteOne({ _id: userId }).exec((error, user) => {
     if (error) return res.status(400).json({ error });
