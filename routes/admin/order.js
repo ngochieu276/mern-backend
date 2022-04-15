@@ -14,7 +14,7 @@ const {
 } = require("../../controllers/admin/order");
 const router = express.Router();
 
-router.post("/update", requireSignin, adminMiddleware, updateOrders);
+router.put("/update", requireSignin, adminMiddleware, updateOrders);
 
 router.post(
   "/getOrdersByEmail",

@@ -28,7 +28,6 @@ router.post(
   getProductsByQuery
 );
 router.put("/update", requireSignin, adminMiddleware, updateProduct);
-
 router.delete("/:productId", requireSignin, adminMiddleware, deleteProduct);
 
 module.exports = router;

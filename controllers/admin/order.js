@@ -144,25 +144,14 @@ exports.addOrderToAdmin = async (req, res) => {
 };
 
 exports.getCustomerOrders = async (req, res) => {
-  if (req.user.isMng) {
-    Order.find({})
-      .sort({ createdAt: -1 })
-      .populate("items.productId", "_id name avatar")
-      .populate("user", "userName email")
-      .exec((error, orders) => {
-        if (error) return res.status(400).json({ error });
-        if (orders) return res.status(200).json({ orders });
-      });
-  } else {
-    Order.find({ takeCaredBy: req.user._id })
-      .sort({ createdAt: -1 })
-      .populate("items.productId", "_id name avatar")
-      .populate("user", "userName email")
-      .exec((error, orders) => {
-        if (error) return res.status(400).json({ error });
-        if (orders) return res.status(200).json({ orders });
-      });
-  }
+  Order.find({})
+    .sort({ createdAt: -1 })
+    .populate("items.productId", "_id name avatar")
+    .populate("user", "userName email")
+    .exec((error, orders) => {
+      if (error) return res.status(400).json({ error });
+      if (orders) return res.status(200).json({ orders });
+    });
 };
 
 exports.getUnCaredOrder = (req, res) => {
@@ -330,6 +319,7 @@ exports.getCustomOrderById = (req, res) => {
   if (orderId) {
     Order.findOne({ _id: orderId })
       .populate("items.productId", "_id name avatar")
+      .populate("user", "userName email")
       .exec((error, order) => {
         if (error) return res.status(400).json({ error });
         if (order) return res.status(200).json({ order });

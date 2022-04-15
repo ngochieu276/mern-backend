@@ -55,8 +55,17 @@ exports.login = (req, res) => {
           }
         );
 
-        const { _id, firstName, lastName, userName, email, dob, phone, role } =
-          user;
+        const {
+          _id,
+          firstName,
+          lastName,
+          userName,
+          email,
+          dob,
+          phone,
+          role,
+          profilePicture,
+        } = user;
 
         res.status(200).json({
           token,
@@ -69,6 +78,7 @@ exports.login = (req, res) => {
             dob,
             phone,
             role,
+            profilePicture,
           },
         });
       } else {
