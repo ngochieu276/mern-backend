@@ -55,6 +55,7 @@ const addToCart = async ({ userId, productId, quantity }) => {
   let itemExisted = false;
   // Add quantity if item already in cart
   cart.products.forEach((product) => {
+    console.log("58", product);
     if (product.product.toString() === productId) {
       product.quantity += quantity;
       itemExisted = true;

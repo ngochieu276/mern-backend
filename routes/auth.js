@@ -4,6 +4,7 @@ const {
   register,
   getUserInformation,
   updateUser,
+  changePassword,
 } = require("../controllers/auth");
 const {
   requireSignin,
@@ -22,6 +23,7 @@ router.post("/login", validateLoginRequest, isRequestValidated, login);
 router.post("/register", validateRegisterRequest, isRequestValidated, register);
 
 router.put("/update", requireSignin, userMiddleware, updateUser);
+router.patch("/changePassword", requireSignin, userMiddleware, changePassword);
 
 router.get("/me", requireSignin, getUserInformation);
 
