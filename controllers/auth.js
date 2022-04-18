@@ -103,10 +103,38 @@ exports.getUserInformation = (req, res) => {
     });
 };
 
+exports.changePassword = async (req, res) => {
+  const { _id } = req.user;
+  const { currentPassword, newPassword } = req.body.payload;
+  console.log(req.body);
+  console.log(currentPassword, newPassword);
+  User.findById(_id).exec(async (error, user) => {
+    if (error) return res.status(400).json({ error });
+    if (user) {
+      const isValidPassword = await user.authenticate(currentPassword);
+      if (isValidPassword) {
+        const newHashPassword = await bcrypt.hash(newPassword, 10);
+        User.findByIdAndUpdate(_id, { hash_password: newHashPassword }).exec(
+          (error, user) => {
+            if (error) return res.status(400).json({ error });
+            if (user)
+              return res
+                .status(201)
+                .json({ message: "Change password Success" });
+          }
+        );
+      } else {
+        return res
+          .status(400)
+          .json({ message: "Current password is incorrect" });
+      }
+    }
+  });
+};
+
 exports.updateUser = async (req, res) => {
   const { _id } = req.user;
   const updateData = req.body;
-
   if (updateData.password) {
     const newPassword = await bcrypt.hash(updateData.password, 10);
     updateData.password = newPassword;
