@@ -6,8 +6,10 @@ exports.validateRegisterRequest = [
   check("email").isEmail().withMessage("Valid Email is required"),
 
   check("password")
-    .isLength({ min: 6 })
-    .withMessage("Password must 6 character long"),
+    .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/, "i")
+    .withMessage(
+      "Password should be combination of one uppercase , one lower case, one special char, one digit and min 8 , max 20 char long"
+    ),
 ];
 
 exports.validateLoginRequest = [

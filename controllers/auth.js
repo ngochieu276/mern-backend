@@ -5,7 +5,7 @@ const shortid = require("shortid");
 
 exports.register = async (req, res) => {
   User.findOne({ email: req.body.email }).exec((error, user) => {
-    if (user) return res.status(400).json({ message: "User already register" });
+    if (user) return res.status(400).json({ error: "User already register" });
   });
 
   const { firstName, lastName, email, password, dob, phone } = req.body;
@@ -26,11 +26,10 @@ exports.register = async (req, res) => {
 
   _user.save((error, data) => {
     if (error) {
-      return res.status(400).json({ error });
     }
     if (data) {
       return res.status(200).json({
-        message: "User create successfull",
+        error: "User create successfull",
       });
     }
   });
@@ -87,7 +86,7 @@ exports.login = (req, res) => {
         });
       }
     } else {
-      return res.status(400).json({ message: "Something went wrong " });
+      return res.status(400).json({ message: "Your email is not existed " });
     }
   });
 };
@@ -124,9 +123,7 @@ exports.changePassword = async (req, res) => {
           }
         );
       } else {
-        return res
-          .status(400)
-          .json({ message: "Current password is incorrect" });
+        return res.status(400).json({ error: "Current password is incorrect" });
       }
     }
   });
