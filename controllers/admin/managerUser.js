@@ -75,7 +75,8 @@ exports.updateAdminUser = async (req, res) => {
     new: true,
   }).exec((error, user) => {
     if (error) return res.status(400).json({ error });
-    if (user) return res.status(201).json({ user });
+    if (user)
+      return res.status(201).json({ user, message: "Update admin success" });
   });
 };
 
@@ -85,6 +86,6 @@ exports.deleteAdminUser = (req, res) => {
 
   User.deleteOne({ _id: userId }).exec((error, user) => {
     if (error) return res.status(400).json({ error });
-    if (user) return res.status(202).json({ message: "delete success" });
+    if (user) return res.status(202).json({ message: "Delete admin success" });
   });
 };
