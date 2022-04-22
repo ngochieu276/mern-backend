@@ -32,7 +32,10 @@ exports.createProduct = (req, res) => {
 
   product.save((err, product) => {
     if (err) return res.status(400).json({ err });
-    if (product) return res.status(201).json({ product });
+    if (product)
+      return res
+        .status(201)
+        .json({ product, message: "Create product successfull" });
   });
 };
 
@@ -101,7 +104,10 @@ exports.updateProduct = async (req, res) => {
     new: true,
   }).exec((error, product) => {
     if (error) return res.status(400).json({ error, message: "update failed" });
-    if (product) return res.status(201).json({ product });
+    if (product)
+      return res
+        .status(201)
+        .json({ product, message: "Update product success" });
   });
 };
 

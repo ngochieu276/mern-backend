@@ -85,7 +85,7 @@ exports.updateOrders = async (req, res) => {
             },
           });
           report.save();
-          return res.status(201).json({ order });
+          return res.status(201).json({ order, message: "Order is completed" });
         }
       });
   } else {
@@ -125,7 +125,7 @@ exports.updateOrders = async (req, res) => {
             },
           });
           report.save();
-          return res.status(201).json({ order });
+          return res.status(201).json({ order, message: "Order is update" });
         }
       });
   }

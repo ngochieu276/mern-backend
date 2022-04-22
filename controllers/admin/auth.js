@@ -53,7 +53,7 @@ exports.login = (req, res) => {
           },
           process.env.JWT_SECRET,
           {
-            expiresIn: "10m",
+            expiresIn: "3m",
           }
         );
 
@@ -68,13 +68,13 @@ exports.login = (req, res) => {
           role,
           isMng,
         } = user;
-        res.cookie("token", token, { expiresIn: "1m" });
+        res.cookie("token", token, { expiresIn: "3m" });
 
         res.status(200).json({
           token,
           expiresIn: {
             now: new Date().getTime(),
-            then: new Date().getTime() + 10 * 60,
+            then: new Date().getTime() + 3 * 60,
           },
           user: {
             _id,

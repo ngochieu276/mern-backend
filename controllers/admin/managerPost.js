@@ -56,6 +56,6 @@ exports.deletePost = (req, res) => {
   Post.findOneAndDelete({ _id: postId }).exec((error, post) => {
     if (error) return res.status(400).json({ error });
     if (post)
-      return res.status(202).json({ message: "Successful delete post" });
+      return res.status(202).json({ message: "Successful update post" });
   });
 };
